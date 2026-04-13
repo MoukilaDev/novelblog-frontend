@@ -5,7 +5,7 @@ import {testApi} from '../services/api';
 function Home(){
     const[message, setMessage]  = useState('');
 
-    // Fetch message from API on component mount, by calling testApi,
+    // Fetch message from API on the component mount, by calling testApi,
     useEffect(()=>{
         testApi().then(data => setMessage(data));
     },[])

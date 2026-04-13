@@ -23,5 +23,15 @@ export const deletePost = async (id) =>{
     await fetch(`${API_URL}/${id}`,{
         method : 'DELETE'
     }
-);
+    );
+}
+
+export const updatePost  = async (id, post) =>{
+    const response = await fetch(`${API_URL}/${id}`,{
+        method: 'PUT',
+        headers:{"content-type" : "application/json"},
+        body: JSON.stringify(post)
+    });
+
+    return response.json();   
 }
