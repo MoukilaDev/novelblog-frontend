@@ -3,6 +3,7 @@ import { getPosts } from "../services/Postapi";
 import PostForm from "../components/PostForm";
 import { deletePost } from "../services/Postapi";
 import { updatePost } from "../services/Postapi";
+import PostItem from "../components/PostItem";
 
 function  PostList(){
 
@@ -53,40 +54,18 @@ function  PostList(){
             <PostForm onPostCreated={handleNewPost} />
 
             {posts.map(post => (
-                <div key={post.id}>
-
-                    {editingPostId === post.id ? (
-                        <div>
-                            <input
-                                value={editingTitle}
-                                onChange={(e) => setEditingTitle(e.target.value)}
-                            />
-
-                            <textarea
-                                value={editingContent}
-                                onChange={(e) => setEditingContent(e.target.value)}
-                            />
-
-                            <button onClick={() => handleUpdate(post.id)}>
-                                Save
-                            </button>
-                        </div>
-                    ) : (
-                        <div>
-                            <h3>{post.title}</h3>
-                            <p>{post.content}</p>
-
-                            <button onClick={() => handleEditPost(post)}>
-                                Edit
-                            </button>
-
-                            <button onClick={() => handleDeletePost(post.id)}>
-                                Delete
-                            </button>
-                        </div>
-                    )}
-
-                </div>
+                <PostItem
+                    key={post.id}
+                    post={post}
+                    editingPostId={editingPostId}
+                    editingTitle={editingTitle}
+                    editingContent={editingContent}
+                    setEditingTitle={setEditingTitle}
+                    setEditingContent={setEditingContent}
+                    handleEditPost={handleEditPost}
+                    handleDeletePost={handleDeletePost}
+                    handleUpdate={handleUpdate}
+                />
             ))}
         </div>
     );

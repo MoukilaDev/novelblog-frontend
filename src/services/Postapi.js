@@ -17,14 +17,15 @@ export const createPost = async (post) =>{
     });
     
     return response.json();
-}
+};
 
 export const deletePost = async (id) =>{
-    await fetch(`${API_URL}/${id}`,{
-        method : 'DELETE'
+    const response =await fetch(`${API_URL}/${id}`,{method : 'DELETE'});
+    // Checking the response
+    if (!response.ok) {
+    console.error("Delete failed");
     }
-    );
-}
+};
 
 export const updatePost  = async (id, post) =>{
     const response = await fetch(`${API_URL}/${id}`,{
@@ -34,4 +35,4 @@ export const updatePost  = async (id, post) =>{
     });
 
     return response.json();   
-}
+};
