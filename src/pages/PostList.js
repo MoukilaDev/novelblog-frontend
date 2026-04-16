@@ -19,6 +19,7 @@ function  PostList(){
     const handleDeletePost = async (id) =>{
         await deletePost(id);
         setPosts(posts.filter(post => post.id !== id));
+        console.log("Post deleted");
     };
         /* Update post handler
             * Call the API to update the post, then update the local state with the new post data and reset the editing state.
@@ -33,6 +34,7 @@ function  PostList(){
         // Update the local state with the new post data and reset the editing state
         setPosts(posts.map(post => post.id === id ? updated : post));
         setEditingPostId(null);
+        console.log("Post updated");
     }
 
     // State for editing posts

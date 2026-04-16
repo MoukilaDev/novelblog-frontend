@@ -13,6 +13,7 @@ function PostForm({ onPostCreated}){
 
         setTitle('');
         setContent('');
+        console.log("Post created !");
 
     };
     return(
