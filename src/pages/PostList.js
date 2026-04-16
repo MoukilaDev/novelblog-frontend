@@ -7,7 +7,11 @@ import PostItem from "../components/PostItem";
 
 function  PostList(){
 
-    // State for editing posts
+    // State for the loading state
+    const [loading, setLoading] =useState(true);
+    // State for error handling
+    const [error, setError] = useState(null);
+    // State for posts
     const [posts, setPosts] = useState([]);
     // New post handler
     const handleNewPost = (post) => {setPosts([...posts, post])};
@@ -16,6 +20,20 @@ function  PostList(){
         await deletePost(id);
         setPosts(posts.filter(post => post.id !== id));
     };
+        /* Update post handler
+            * Call the API to update the post, then update the local state with the new post data and reset the editing state.
+            * @param {number} id - The ID of the post being updated.
+            * @return {void}
+        */
+    const handleUpdate = async (id) => {
+        const updated = await updatePost(id, {
+            title:  editingTitle,
+            content: editingContent
+        });
+        // Update the local state with the new post data and reset the editing state
+        setPosts(posts.map(post => post.id === id ? updated : post));
+        setEditingPostId(null);
+    }
 
     // State for editing posts
     const [editingPostId, setEditingPostId] = useState(null);
@@ -27,26 +45,26 @@ function  PostList(){
         setEditingTitle(post.title);
         setEditingContent(post.content);
     }
-    // Update post handler
-        /*
-            * Call the API to update the post, then update the local state with the new post data and reset the editing state.
-            * @param {number} id - The ID of the post being updated.
-            * @return {void}
-        */
-    const handleUpdate = async (id) => {
-        const updated = await updatePost(id, {
-            title:  editingTitle,
-            content: editingContent
-        });
-        setPosts(posts.map(post => post.id === id ? updated : post));
-        setEditingPostId(null);
-    }
     
- 
+    
+    // Get the posts, then set data on them, catch any errors and finally set the loading state to false when done
     useEffect(() => {
-        getPosts().then(data => setPosts(data));
+        getPosts()
+            .then(data => setPosts(data))
+            .catch(err => {
+                    console.error(err);
+                    setError("Failed to load posts");
+                })
+            .finally(() => setLoading(false));
     }, []);
-
+    
+        if(loading){
+            return <p>Loading...</p>;
+        }
+        
+        if(error){
+            return <p>{error}</p>;
+        }
     return (
         <div>
             <h2>Liste des posts</h2>
