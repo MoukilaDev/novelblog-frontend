@@ -7,6 +7,12 @@ export const getPosts = async() =>{
     return response.json();
 };
 
+export const getPostById = async (id) =>{
+    const response = await fetch(`${API_URL}/${id}`);
+
+    return response.json();
+}
+
 export const createPost = async (post) =>{
     const response =  await fetch(API_URL,{
         method: 'POST',

@@ -32,7 +32,7 @@ function PostItem({
 
     return(
             <div>
-                <Link to={`/post/${post.id}/${post.content}`}>
+                <Link to={`/post/${post.id}`}>
                     <h3>{post.title}</h3>
                 </Link>
                 <p>{post.content}</p>
