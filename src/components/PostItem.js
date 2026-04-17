@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 function PostItem({
     post,
@@ -31,9 +32,10 @@ function PostItem({
 
     return(
             <div>
-                <h3>{post.title}</h3>
+                <Link to={`/post/${post.id}/${post.content}`}>
+                    <h3>{post.title}</h3>
+                </Link>
                 <p>{post.content}</p>
-
                 <button onClick={ () => handleEditPost(post)}>
                     Edit
                 </button>

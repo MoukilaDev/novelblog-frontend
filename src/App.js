@@ -1,14 +1,19 @@
 import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PostDetails from './pages/PostDetails';
 import PostList from './pages/PostList';
 
 function App() {
 
   return (
-        <div>
-          <h1>Lowen's Adventures Blog</h1>
-          <PostList />
-        </div>
-    );
+    <BrowserRouter>
+      <h1>Lowen's adventures blog</h1>
+      <Routes>
+        <Route path='/' element={<PostList/>} />
+        <Route path='/post/:id/:content' element={<PostDetails/>} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
