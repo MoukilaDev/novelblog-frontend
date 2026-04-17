@@ -13,13 +13,30 @@ function  PostList(){
     const [error, setError] = useState(null);
     // State for posts
     const [posts, setPosts] = useState([]);
+    // State for action loading state (e.g., deleting or updating a post)
+    const [loadingAction, setLoadingAction] = useState(false);
+
+
     // New post handler
-    const handleNewPost = (post) => {setPosts([...posts, post])};
+    const handleNewPost = (post) => {
+        setPosts([...posts, post]);
+        alert("Post créé avec succès !");
+    };
+
     // Delete post handler
     const handleDeletePost = async (id) =>{
-        await deletePost(id);
-        setPosts(posts.filter(post => post.id !== id));
-        console.log("Post deleted");
+        const confirmed = window.confirm("Are you sure ?")
+        if (!confirmed) return;
+
+        setLoadingAction(true);
+        try{
+            await deletePost(id);
+            setPosts(posts.filter(post => post.id !== id));
+        }catch(err){
+            alert("Delete failed");
+        }finally{
+            setLoadingAction(false);
+        }
     };
         /* Update post handler
             * Call the API to update the post, then update the local state with the new post data and reset the editing state.
@@ -60,13 +77,9 @@ function  PostList(){
             .finally(() => setLoading(false));
     }, []);
     
-        if(loading){
-            return <p>Loading...</p>;
-        }
-        
-        if(error){
-            return <p>{error}</p>;
-        }
+        if(loading) return <p>Loading...</p>;
+        if(error) return <p>{error}</p>;
+
     return (
         <div>
             <h2>Liste des posts</h2>
@@ -85,6 +98,7 @@ function  PostList(){
                     handleEditPost={handleEditPost}
                     handleDeletePost={handleDeletePost}
                     handleUpdate={handleUpdate}
+                    loadingAction={loadingAction}
                 />
             ))}
         </div>

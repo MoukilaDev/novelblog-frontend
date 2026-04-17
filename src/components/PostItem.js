@@ -9,7 +9,8 @@ function PostItem({
     setEditingContent,
     handleEditPost,
     handleDeletePost,
-    handleUpdate
+    handleUpdate,
+    loadingAction
 }) {
     if (editingPostId === post.id){
         return(
@@ -39,8 +40,11 @@ function PostItem({
                 <button onClick={ () => handleEditPost(post)}>
                     Edit
                 </button>
-                <button onClick={() => handleDeletePost(post.id)}>
-                    Delete
+                <button
+                 onClick={() => handleDeletePost(post.id)}
+                 disabled ={loadingAction}
+                 >
+                    {loadingAction ? "Deleting..." : "Delete"}
                 </button>
             </div>
     );
