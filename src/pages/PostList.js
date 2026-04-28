@@ -82,7 +82,7 @@ function  PostList(){
 
     return (
         <div>
-            <h2>Liste des posts</h2>
+            <h2>All posts</h2>
 
             <PostForm onPostCreated={handleNewPost} />
 

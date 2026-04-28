@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPostById } from "../services/Postapi";
+import { getCommentsByPostId } from "../services/Postapi";
 import { useNavigate } from "react-router-dom";
 
 function PostDetails() {
@@ -8,6 +9,7 @@ function PostDetails() {
     /// Navigation hook
     const navigate = useNavigate();
     const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -19,6 +21,12 @@ function PostDetails() {
                 setError("Failed to load post");
             })
             .finally(() => setLoading(false));
+        getCommentsByPostId(id)
+            .then(data => setComments(data))
+            .catch(err => {
+                console.error(err);
+                setError('Failed to load commment');
+            })
     }, [id]);
 
     if (loading) return <p>Loading post...</p>;
@@ -31,6 +39,13 @@ function PostDetails() {
             </button>
             <h2>{post.title}</h2>
             <p>{post.content}</p>
+            <h3>Commments</h3>
+            {comments.map(comment =>(
+                <div key={comment.id}>
+                    <p><strong>{comment.readerName}</strong></p>
+                    <p>{comment.content}</p>
+                </div>
+            ))}
         </div>
     );
 }

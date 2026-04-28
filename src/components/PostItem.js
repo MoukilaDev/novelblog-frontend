@@ -44,7 +44,7 @@ function PostItem({
                  onClick={() => handleDeletePost(post.id)}
                  disabled ={loadingAction}
                  >
-                    {loadingAction ? "Deleting..." : "Delete"}
+                    {loadingAction ? "Deleting..." : "Deleted"}
                 </button>
             </div>
     );
