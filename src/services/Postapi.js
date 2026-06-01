@@ -31,6 +31,17 @@ export const createPost = async (post) =>{
     return response.json();
 };
 
+export const createCommentById = async (postId, comment) => {
+    const response = await fetch(`${API_URL}/${postId}/comments`,{
+        method : 'POST',
+        headers : {
+            "content-type" : "application/json"
+        },
+        body : JSON.stringify(comment)
+    });
+    return response.json();
+}
+
 export const deletePost = async (id) =>{
     const response =await fetch(`${API_URL}/${id}`,{method : 'DELETE'});
     // Checking the response

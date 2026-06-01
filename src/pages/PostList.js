@@ -82,10 +82,8 @@ function  PostList(){
 
     return (
         <div>
+            <h1>Lowen's adventures blog</h1>
             <h2>All posts</h2>
-
-            <PostForm onPostCreated={handleNewPost} />
-
             {posts.map(post => (
                 <PostItem
                     key={post.id}
@@ -101,6 +99,7 @@ function  PostList(){
                     loadingAction={loadingAction}
                 />
             ))}
+            <PostForm onPostCreated={handleNewPost} />
         </div>
     );
 }
