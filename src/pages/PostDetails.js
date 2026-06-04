@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getPostById } from "../services/Postapi";
 import { getCommentsByPostId } from "../services/Postapi";
 import { createCommentById } from "../services/Postapi";
+import { deleteCommentById } from "../services/Postapi";
 import { useNavigate } from "react-router-dom";
 
 function PostDetails() {
@@ -15,6 +16,7 @@ function PostDetails() {
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [commentDeleting, setCommentDeleting] = useState(false);
     // New comment handler
     const handleNewComment = async(e) =>{
         e.preventDefault();
@@ -28,7 +30,22 @@ function PostDetails() {
             console.error(err);
             alert("Failed to create comment", err);
         }
-    }
+    };
+
+    const handleDeleteComment = async (commentId) =>{
+        const confirmed = window.confirm("Are you sure ?")
+            if (!confirmed) return;
+            setCommentDeleting(true);
+            try{
+                await deleteCommentById(commentId);
+                setComments(comments.filter(comment => comment.id !== commentId));
+            }catch(err){
+                console.error(err);
+                alert("Delete failed");
+            }finally{
+                setCommentDeleting(false);
+            }
+    };
 
     // Fetch post and comments on component mount
     useEffect(() => {
@@ -50,6 +67,7 @@ function PostDetails() {
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>{error}</p>;
     if (!post) return <p>Loading post ...</p>;
+    if(commentDeleting) return <p>Deleting comment ...</p>;
 
     return (<div>
             <button onClick={() => navigate("/")}>
@@ -57,13 +75,15 @@ function PostDetails() {
             </button>
             <h2>{post.title}</h2>
             <p>{post.content}</p>
-            <h3>All Commments</h3>
+            <h3>All Commments ({comments.length})</h3>
             {comments.map(comment =>(
                 <div key={comment.id}>
                     <p><strong>{comment.readerName}</strong></p>
                     <p>{comment.content}</p>
+                    <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
                 </div>
             ))}
+                
                 <br/>
                 <h3>Add new comment</h3>
                 <form onSubmit={handleNewComment}>
