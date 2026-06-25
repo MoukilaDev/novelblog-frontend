@@ -11,15 +11,17 @@ function PostItem({
     handleDeletePost,
     handleUpdate,
     loadingAction
-}) {
+}) 
+
+{
     if (editingPostId === post.id){
         return(
             <div>
                 <input
                     value={editingTitle}
-                    onChange={(e) => setEditingTitle(e.target.value)} 
+                    onChange={(e) => setEditingTitle(e.target.value)}
                 />
-                <textarea 
+                <textarea
                     value={editingContent}
                     onChange={(e) => setEditingContent(e.target.value)}
                 />

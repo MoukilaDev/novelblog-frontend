@@ -2,14 +2,13 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPostById } from "../services/Postapi";
 import { getCommentsByPostId } from "../services/Postapi";
+import CommentItem from "./CommentItem";
 import { createCommentById } from "../services/Postapi";
 import { deleteCommentById } from "../services/Postapi";
 import { useNavigate } from "react-router-dom";
 
 function PostDetails() {
     const { id } = useParams();
-    /// Navigation hook
-    const navigate = useNavigate();
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [readerName, setReaderName] = useState('');
@@ -17,6 +16,8 @@ function PostDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [commentDeleting, setCommentDeleting] = useState(false);
+    // Navigation hook
+    const navigate = useNavigate();
     // New comment handler
     const handleNewComment = async(e) =>{
         e.preventDefault();
@@ -32,6 +33,11 @@ function PostDetails() {
         }
     };
 
+    const onCommentUpdated =  (updatedComment) => {
+        setComments(comments.map(comment => comment.id === updatedComment.id ? updatedComment : comment));
+        console.log("comment updated")
+    }
+    
     const handleDeleteComment = async (commentId) =>{
         const confirmed = window.confirm("Are you sure ?")
             if (!confirmed) return;
@@ -46,7 +52,6 @@ function PostDetails() {
                 setCommentDeleting(false);
             }
     };
-
     // Fetch post and comments on component mount
     useEffect(() => {
         getPostById(id)
@@ -68,8 +73,9 @@ function PostDetails() {
     if (error) return <p>{error}</p>;
     if (!post) return <p>Loading post ...</p>;
     if(commentDeleting) return <p>Deleting comment ...</p>;
-
-    return (<div>
+    
+    return (
+        <div>
             <button onClick={() => navigate("/")}>
                 Back to posts
             </button>
@@ -77,17 +83,17 @@ function PostDetails() {
             <p>{post.content}</p>
             <h3>All Commments ({comments.length})</h3>
             {comments.map(comment =>(
-                <div key={comment.id}>
-                    <p><strong>{comment.readerName}</strong></p>
-                    <p>{comment.content}</p>
-                    <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
-                </div>
+                <CommentItem
+                    comment={comment}
+                    handleDeleteComment={handleDeleteComment}
+                    onCommentUpdated={onCommentUpdated}
+                />
             ))}
                 
-                <br/>
-                <h3>Add new comment</h3>
-                <form onSubmit={handleNewComment}>
-                    <input 
+            <br/>
+            <h3>Add new comment</h3>
+            <form onSubmit={handleNewComment}>
+                <input 
                     type="text"
                     placeholder = "enter your name"
                     value ={readerName}
@@ -102,7 +108,7 @@ function PostDetails() {
                     />
                     <br />
                     <button type ="submit">Send</button>
-                </form>
+            </form>
         </div>
     );
 }

@@ -42,8 +42,28 @@ export const createCommentById = async (postId, comment) => {
     return response.json();
 }
 
+export const updatePost  = async (id, post) =>{
+    const response = await fetch(`${API_URL}/${id}`,{
+        method: 'PUT',
+        headers:{"content-type" : "application/json"},
+        body: JSON.stringify(post)
+    });
+
+    return response.json();   
+};
+
+export const updateComment = async (commentId, comment) => {
+    const response = await fetch(`${API_URL}/comments/${commentId}`,{
+        method : 'PUT',
+        headers : {"content-type" : "application/json"},
+        body : JSON.stringify(comment)
+    });
+
+    return response.json();
+}
+
 export const deleteCommentById  = async(commentId) =>{
-    const response = await fetch(`${API_URL}/comments/${commentId}`,{method : 'DELETE'});
+    const response = await fetch(`${API_URL}/${commentId}/comments`,{method : 'DELETE'});
     // Checking the response
     if (!response.ok) {
     console.error("Delete failed");
@@ -58,12 +78,4 @@ export const deletePost = async (id) =>{
     }
 };
 
-export const updatePost  = async (id, post) =>{
-    const response = await fetch(`${API_URL}/${id}`,{
-        method: 'PUT',
-        headers:{"content-type" : "application/json"},
-        body: JSON.stringify(post)
-    });
 
-    return response.json();   
-};

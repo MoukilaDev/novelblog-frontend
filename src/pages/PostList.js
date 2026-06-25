@@ -13,6 +13,10 @@ function  PostList(){
     const [error, setError] = useState(null);
     // State for posts
     const [posts, setPosts] = useState([]);
+    // State for editing posts elements
+    const [editingPostId, setEditingPostId] = useState(null);
+    const [editingTitle, setEditingTitle] = useState('');
+    const [editingContent, setEditingContent] = useState('');
     // State for action loading state (e.g., deleting or updating a post)
     const [loadingAction, setLoadingAction] = useState(false);
 
@@ -54,10 +58,6 @@ function  PostList(){
         console.log("Post updated");
     }
 
-    // State for editing posts
-    const [editingPostId, setEditingPostId] = useState(null);
-    const [editingTitle, setEditingTitle] = useState('');
-    const [editingContent, setEditingContent] = useState('');
     // Editing post handler
     const handleEditPost = (post) => {
         setEditingPostId(post.id);
