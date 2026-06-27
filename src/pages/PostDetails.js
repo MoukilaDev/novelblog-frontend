@@ -2,56 +2,34 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPostById } from "../services/Postapi";
 import { getCommentsByPostId } from "../services/Postapi";
-import CommentItem from "./CommentItem";
-import { createCommentById } from "../services/Postapi";
-import { deleteCommentById } from "../services/Postapi";
+import CommentItem from "../components/CommentItem";
+import CommentForm from "../components/CommentForm";
 import { useNavigate } from "react-router-dom";
 
 function PostDetails() {
     const { id } = useParams();
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
-    const [readerName, setReaderName] = useState('');
-    const [content, setContent] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [commentDeleting, setCommentDeleting] = useState(false);
     // Navigation hook
     const navigate = useNavigate();
     // New comment handler
-    const handleNewComment = async(e) =>{
-        e.preventDefault();
-        const newComment = {readerName, content};
-            
-        try{ const comment = await createCommentById(id, newComment);
-        setComments([...comments, comment]);
-        setReaderName('');
-        setContent('');
-        }catch(err){
-            console.error(err);
-            alert("Failed to create comment", err);
-        }
-    };
+    const onCommentCreated = (newComment) =>{
+        setComments([...comments, newComment]);
+    }
+
+    const onCommentDeleted = (deletedComment) => {
+        setComments(comments.filter(comment => comment.id !== deletedComment.id));
+        console.log("comment deleted");
+    }
 
     const onCommentUpdated =  (updatedComment) => {
         setComments(comments.map(comment => comment.id === updatedComment.id ? updatedComment : comment));
-        console.log("comment updated")
+        console.log("comment updated");
     }
     
-    const handleDeleteComment = async (commentId) =>{
-        const confirmed = window.confirm("Are you sure ?")
-            if (!confirmed) return;
-            setCommentDeleting(true);
-            try{
-                await deleteCommentById(commentId);
-                setComments(comments.filter(comment => comment.id !== commentId));
-            }catch(err){
-                console.error(err);
-                alert("Delete failed");
-            }finally{
-                setCommentDeleting(false);
-            }
-    };
+    
     // Fetch post and comments on component mount
     useEffect(() => {
         getPostById(id)
@@ -67,12 +45,11 @@ function PostDetails() {
                 setError('Failed to load commments');
             })
             .finally(() => setLoading(false));
-    }, [id]);
+    }, [id]);//The id parameter means that the effect will re-run if the id changes, ensuring that the component fetches the correct post and comments when navigating to a different post.
 
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>{error}</p>;
     if (!post) return <p>Loading post ...</p>;
-    if(commentDeleting) return <p>Deleting comment ...</p>;
     
     return (
         <div>
@@ -83,32 +60,20 @@ function PostDetails() {
             <p>{post.content}</p>
             <h3>All Commments ({comments.length})</h3>
             {comments.map(comment =>(
+                // Render each comment using the CommentItem component, passing necessary props for handling updates and deletions
                 <CommentItem
                     comment={comment}
-                    handleDeleteComment={handleDeleteComment}
+                    onCommentDeleted={onCommentDeleted}
                     onCommentUpdated={onCommentUpdated}
                 />
             ))}
                 
             <br/>
             <h3>Add new comment</h3>
-            <form onSubmit={handleNewComment}>
-                <input 
-                    type="text"
-                    placeholder = "enter your name"
-                    value ={readerName}
-                    onChange={(e)=> setReaderName(e.target.value)}
-                    />
-                    <br />
-                    <input                     
-                    type="text"
-                    placeholder = "enter your comment"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    />
-                    <br />
-                    <button type ="submit">Send</button>
-            </form>
+            <CommentForm
+                id={id}
+                onCommentCreated={onCommentCreated}
+            />
         </div>
     );
 }

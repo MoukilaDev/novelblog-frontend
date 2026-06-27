@@ -20,13 +20,11 @@ function  PostList(){
     // State for action loading state (e.g., deleting or updating a post)
     const [loadingAction, setLoadingAction] = useState(false);
 
-
     // New post handler
     const handleNewPost = (post) => {
         setPosts([...posts, post]);
-        alert("Post créé avec succès !");
+        alert("Post created successfully !");
     };
-
     // Delete post handler
     const handleDeletePost = async (id) =>{
         const confirmed = window.confirm("Are you sure ?")
@@ -42,11 +40,10 @@ function  PostList(){
             setLoadingAction(false);
         }
     };
-        /* Update post handler
-            * Call the API to update the post, then update the local state with the new post data and reset the editing state.
-            * @param {number} id - The ID of the post being updated.
-            * @return {void}
-        */
+    //Update post handler
+            // Call the API to update the post, then update the local state with the new post data and reset the editing state.
+            // @param {number} id - The ID of the post being updated.
+            // @return {void}
     const handleUpdate = async (id) => {
         const updated = await updatePost(id, {
             title:  editingTitle,
@@ -57,15 +54,12 @@ function  PostList(){
         setEditingPostId(null);
         console.log("Post updated");
     }
-
     // Editing post handler
     const handleEditPost = (post) => {
         setEditingPostId(post.id);
         setEditingTitle(post.title);
         setEditingContent(post.content);
     }
-    
-    
     // Get the posts, then set data on them, catch any errors and finally set the loading state to false when done
     useEffect(() => {
         getPosts()
