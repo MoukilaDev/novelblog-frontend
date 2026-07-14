@@ -5,19 +5,19 @@ function PostForm({ onPostCreated}){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
-    const handleSubmit = async (e) => { e.preventDefault();
+    const handleNewPost = async (e) => { e.preventDefault();
         const newPost = {title, content};
         const createdPost = await createPost(newPost);
 
         onPostCreated(createdPost);
-
         setTitle('');
         setContent('');
+        alert("Post created successfully !");
         console.log("Post created !");
 
     };
     return(
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleNewPost}>
             <h2>Create your post</h2>
 
             <input
