@@ -58,7 +58,10 @@ function  PostList(){
                     onPostDeleted={onPostDeleted}
                 />
             ))}
-            <PostForm onPostCreated={onPostCreated} />
+            <PostForm 
+                onPostCreated={onPostCreated}
+             />
+             
         </div>
     );
 }

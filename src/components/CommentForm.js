@@ -18,11 +18,10 @@ function CommentForm({
             onCommentCreated(comment);
             setReaderName('');
             setContent('');
+            console.log("Comment created !");
         }catch(err){
             console.error(err);
             alert("Failed to create comment", err);
-        }finally{
-            console.log("Comment created !");
         }    
     };
         return(
