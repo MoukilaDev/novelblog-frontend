@@ -31,6 +31,7 @@ function PostForm({ onPostCreated}){
 
     const onCategoryCreated =(category) =>{
         setCategories(previousCategories => [...previousCategories, category])
+        setSelectedCategoryId(category.categoryId);
     }
 
     useEffect(() =>{

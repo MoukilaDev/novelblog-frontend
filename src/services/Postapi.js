@@ -38,7 +38,7 @@ export const createCategory = async (category) =>{
 }
 
 export const createPost = async (post, categoryId) =>{
-    const response =  await fetch(`${API_URL}/${categoryId}/post`,{
+    const response =  await fetch(`${API_URL}/post/${categoryId}`,{
         method: 'POST',
         headers:{
             "content-type": "application/json"
@@ -64,8 +64,9 @@ export const createCommentById = async (postId, comment) => {
     return response.json();
 }
 
-export const updatePost  = async (postId, post) =>{
-    const response = await fetch(`${API_URL}/${postId}/Post`,{
+export const updatePost  = async (id, post) =>{
+    console.log(id);
+    const response = await fetch(`${API_URL}/${id}`,{
         method: 'PUT',
         headers:{"content-type" : "application/json"},
         body: JSON.stringify(post)
@@ -75,7 +76,7 @@ export const updatePost  = async (postId, post) =>{
 };
 
 export const updateComment = async (commentId, comment) => {
-    const response = await fetch(`${API_URL}/comments/${commentId}`,{
+    const response = await fetch(`${API_URL}/${commentId}/comments`,{
         method : 'PUT',
         headers : {"content-type" : "application/json"},
         body : JSON.stringify(comment)
@@ -84,8 +85,8 @@ export const updateComment = async (commentId, comment) => {
     return response.json();
 };
 
-export const deletePost = async (postId) =>{
-    const response =await fetch(`${API_URL}/${postId}/Post`,{method : 'DELETE'});
+export const deletePost = async (id) =>{
+    const response =await fetch(`${API_URL}/${id}`,{method : 'DELETE'});
     // Checking the response
     if (!response.ok) {
     console.error("Delete failed");
